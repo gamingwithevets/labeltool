@@ -26,7 +26,7 @@ def load_labels(f: open, start: int):
 				elif data[0].startswith('.l_'):
 					addr = curr_func + int(data[0][3:], 16) - start
 					if addr in labels: logging.warning(f'Duplicate local label {curr_func:05X}+{int(data[0][3:], 16):03X}, skipping')
-					else: labels[addr] = [data[1], False, 0, []]
+					else: labels[addr] = [data[1], False, curr_func, []]
 				elif data[0].startswith('d_'):
 					addr = int(data[0][2:], 16) - start
 					if addr in data_labels: logging.warning(f'Duplicate data label {addr:05X}, skipping')
@@ -40,7 +40,8 @@ def load_labels(f: open, start: int):
 							curr_func = addr
 					except ValueError:
 						if data[0] in data_bit_labels: logging.warning(f'Duplicate bit data label {data[0]}, skipping')
-						else: data_bit_labels[data[0]] = data[1]
+						elif '.' in data[0]: data_bit_labels[data[0]] = data[1]
+						else: logging.warning(f'Invalid label {data[0]}')
 			except Exception as e: logging.warning(f'Exception occured: {str(e)} [{type(e).__name__}]')
 
 	return labels, data_labels, data_bit_labels

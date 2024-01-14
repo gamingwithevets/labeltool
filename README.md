@@ -14,6 +14,13 @@ data_label.1		bit_data_label
 
 Note that there should not be any duplicate labels in the provided labels file. If there are, the first label found will be used.
 
+## Label format
+### Function and local labels
+```
+addr: {name, is_func}
+```
+If `is_func` is `False`:
+
 ## Functions
 ### `load_label(f, start)`
 Loads labels from a file-like object.
