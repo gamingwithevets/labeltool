@@ -19,7 +19,18 @@ Note that there should not be any duplicate labels in the provided labels file. 
 ```
 addr: {name, is_func}
 ```
-If `is_func` is `False`:
+If `is_func` is `False`, there will be 2 extra items.
+```
+addr: {name, False, parent_addr, bcond_jmp_list}
+```
+### Data labels
+```
+addr: name
+```
+### Bit data labels
+```
+bit_string: name
+```
 
 ## Functions
 ### `load_label(f, start)`
