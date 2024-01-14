@@ -15,10 +15,11 @@ data_label.1		bit_data_label
 Note that there should not be any duplicate labels in the provided labels file. If there are, the first label found will be used.
 
 ## Functions
-### `load_label(f)`
+### `load_label(f, start)`
 Loads labels from a file-like object.
 
 Arguments:
 - `f`: A file-like object to load label data from. Should be in text read mode.
+- `start`: The starting address.
 
 Returns: 3 dictionaries for function + local labels, data labels and bit data labels respectively.
