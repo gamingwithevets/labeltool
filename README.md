@@ -33,11 +33,23 @@ bit_string: name
 ```
 
 ## Functions
-### `load_label(f, start)`
+### `load_labels(f, start)`
 Loads labels from a file-like object.
 
 Arguments:
 - `f`: A file-like object to load label data from. Should be in text read mode.
-- `start`: The starting address.
+- `start`: The starting code address.
 
 Returns: 3 dictionaries for function + local labels, data labels and bit data labels respectively.
+
+### `save_labels(f, start, labels_, data_labels, data_bit_labels)`
+Saves labels to a file-like object.
+
+Arguments:
+- `f`: A file-like object to save label data to. Should be in text write mode.
+- `start`: The starting code address.
+- `labels_`: The dictionary containing function + local labels.
+- `data_labels`: The dictionary containing data labels.
+- `data_bit_labels`: The dictionary containing bit data labels.
+
+Returns: None
