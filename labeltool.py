@@ -55,17 +55,15 @@ def load_labels(f, start):
 def save_labels(f, start, labels_, data_labels, data_bit_labels):
 	labels = {}
 	for k, v in labels_.items():
-		addr = k + start
-		if not v[1]: v[2] += start
-		labels[addr] = v
+		if v[1]: labels[k + start] = v
 
 	labels = dict(sorted(labels.items()))
 	data_labels = dict(sorted(data_labels.items()))
 	data_bit_labels = dict(sorted(data_bit_labels.items()))
 
-	content = '# Function + local labels'
-	content += '\n'.join([f'{k:05X}\t\t{v[0]}' for k, v in labels.items()]) + '\n\n# Data labels'
-	content += '\n'.join([f'{k:05X}\t\t{v}' for k, v in data_labels.items()]) + '\n\n# Bit data labels'
+	content = '# Function + local labels\n'
+	content += '\n'.join([f'{k:05X}\t\t{v[0]}' for k, v in labels.items()]) + '\n\n# Data labels\n'
+	content += '\n'.join([f'{k:05X}\t\t{v}' for k, v in data_labels.items()]) + '\n\n# Bit data labels\n'
 	content += '\n'.join([f'{k:05X}\t\t{v}' for k, v in data_bit_labels.items()]) + '\n'
 
 	f.write(content)
