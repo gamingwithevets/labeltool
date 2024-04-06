@@ -17,11 +17,11 @@ Note that there should not be any duplicate labels in the provided labels file. 
 ## Label format
 ### Function and local labels
 ```
-addr: {name, is_func}
+addr: [name, is_func]
 ```
 If `is_func` is `False`, there will be 2 extra items.
 ```
-addr: {name, False, parent_addr, bcond_jmp_list}
+addr: [name, False, parent_addr, bcond_jmp_list]
 ```
 ### Data labels
 ```
