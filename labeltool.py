@@ -54,9 +54,13 @@ def load_labels(f, start):
 
 def save_labels(f, start, labels_, data_labels, data_bit_labels):
 	labels = {}
+	curr_func = None
 	for k, v in labels_.items():
 		addr = k + start
-		if not v[1]: v[2] += start
+		if v[1]: curr_func = addr
+		else:
+			if v[0].startswith('.l_') and addr == curr_func + int(v[0][3:], 16): continue
+			v[2] += start
 		labels[addr] = v
 
 	labels = dict(sorted(labels.items()))
