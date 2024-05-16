@@ -40,7 +40,9 @@ Arguments:
 - `f`: A file-like object to load label data from. Should be in text read mode.
 - `start`: The starting code address.
 
-Returns: 3 dictionaries for function + local labels, data labels and bit data labels respectively.
+Returns:
+- 3 dictionaries for function + local labels, data labels and bit data labels respectively, if the function ran successfully.
+- None, if the function ran with an error.
 
 ### `save_labels(f, start, labels_, data_labels, data_bit_labels)`
 Saves labels to a file-like object.

@@ -24,6 +24,9 @@ def load_labels(f, start):
 						labels[addr] = [data[1], True]
 						curr_func = addr
 				elif data[0].startswith('.l_'):
+					if curr_func is None:
+						logging.error('No function label before local label')
+						return
 					addr = curr_func + int(data[0][3:], 16) - start
 					if addr in labels: logging.warning(f'Duplicate local label {curr_func:05X}+{int(data[0][3:], 16):03X}, skipping')
 					else: labels[addr] = [data[1], False, curr_func, []]
@@ -48,18 +51,18 @@ def load_labels(f, start):
 								else: logging.warning(f'Invalid bit data label {data[0]}, skipping')
 							else: logging.warning(f'Invalid label {data[0]}, skipping')
 						else: logging.warning(f'Invalid label {data[0]}, skipping')
-			except Exception as e: logging.warning(f'Exception occured: {str(e)} [{type(e).__name__}]')
+			except Exception as e:
+				logging.error(f'Exception occured: {str(e)} [{type(e).__name__}]')
+				return
 
 	return labels, data_labels, data_bit_labels
 
 def save_labels(f, start, labels_, data_labels, data_bit_labels):
 	labels = {}
-	curr_func = None
 	for k, v in labels_.items():
 		addr = k + start
-		if v[1]: curr_func = addr
-		else:
-			if v[0].startswith('.l_') and addr == curr_func + int(v[0][3:], 16): continue
+		if not v[1]:
+			if v[0].startswith('.l_') and addr == v[2] + int(v[0][3:], 16): continue
 			v[2] += start
 		labels[addr] = v
 
@@ -68,9 +71,9 @@ def save_labels(f, start, labels_, data_labels, data_bit_labels):
 	data_bit_labels = dict(sorted(data_bit_labels.items()))
 
 	content = '# Function + local labels\n'
-	content += '\n'.join([f'{k:05X}\t\t{v[0]}' for k, v in labels.items()]) + '\n\n# Data labels\n'
-	content += '\n'.join([f'{k:05X}\t\t{v}' for k, v in data_labels.items()]) + '\n\n# Bit data labels\n'
-	content += '\n'.join([f'{k:05X}\t\t{v}' for k, v in data_bit_labels.items()]) + '\n'
+	content += '\n'.join([f'{format(k, "05X") if v[1] else ".l_"+format(k-v[2], "03X")}\t\t{v[0]}' for k, v in labels.items()]) + '\n\n# Data labels\n'
+	content += '\n'.join([f'd_{k:05X}\t\t{v}' for k, v in data_labels.items()]) + '\n\n# Bit data labels\n'
+	content += '\n'.join([f'{k}\t\t{v}' for k, v in data_bit_labels.items()]) + '\n'
 
 	f.write(content)
 
